@@ -7,10 +7,10 @@ interface SearchRes {
 
 export const searchCompanies = async (query:string) => {
     try {
-        const data = await axios.get<SearchRes>(
+        const res = await axios.get<SearchRes>(
             `https://financialmodelingprep.com/api/v3/search-ticker?query=${query}&limit=10&exchange=NASDAQ&apikey=${process.env.REACT_APP_API_KEY}`
         );
-        return data;
+        return res;
     }
     catch (error) {
         if (axios.isAxiosError(error)) {

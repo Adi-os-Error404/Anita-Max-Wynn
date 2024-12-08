@@ -11,19 +11,19 @@ interface Props {
 
 const Card: React.FC<Props> = ({id, searchResult, onPortfolioCreate}: Props): JSX.Element => {
   return (
-    <div 
-      className='card'
-      id={id}
+    <div
+      className="flex flex-col items-center justify-between w-full p-6 bg-slate-100 rounded-lg md:flex-row"
       key={id}
+      id={id}
     >
-      <img
-          src='https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg'
-          alt='compant logo'
-      />
-      <h2>{searchResult.name} ({searchResult.symbol})</h2>
-      <p>${searchResult.currency}</p>
-      <p className='info'>{searchResult.exchangeShortName} - {searchResult.stockExchange}</p>
-      <AddPortfolio 
+      <h2 className="font-bold text-center text-black md:text-left">
+        {searchResult.name} ({searchResult.symbol})
+      </h2>
+      <p className="text-black">{searchResult.currency}</p>
+      <p className="font-bold text-black">
+        {searchResult.exchangeShortName} - {searchResult.stockExchange}
+      </p>
+      <AddPortfolio
         onPortfolioCreate={onPortfolioCreate}
         symbol={searchResult.symbol}
       />

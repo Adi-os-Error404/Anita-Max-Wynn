@@ -15,34 +15,34 @@ const SearchPage = (props: Props) => {
     const [portfolioVals, setPortfolioVals] = useState<string[]>([]);
 
         const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value);
+            setSearch(e.target.value);
         }
         
         const onSearchSubmit = async (e: SyntheticEvent) => {
-        e.preventDefault()
-        const result = await searchCompanies(search);
-        if (typeof result === "string") {
-            setServerError(result);
-        }
-        else if (Array.isArray(result.data)) {
-            setsearchResults(result.data)
-        }
+            e.preventDefault()
+            const result = await searchCompanies(search);
+            if (typeof result === "string") {
+                setServerError(result);
+            }
+            else if (Array.isArray(result.data)) {
+                setsearchResults(result.data)
+            }
         }
         
         const onPortfolioCreate = (e: any) => {
-        e.preventDefault()
-        if (!portfolioVals.includes(e.target[0].value)) {
-            const pureUpdatedPort = [...portfolioVals, e.target[0].value]
-            setPortfolioVals(pureUpdatedPort);
-        }
+            e.preventDefault()
+            if (!portfolioVals.includes(e.target[0].value)) {
+                const pureUpdatedPort = [...portfolioVals, e.target[0].value]
+                setPortfolioVals(pureUpdatedPort);
+            }
         }
     
         const onPortfolioDelete = (e: any) => {
-        e.preventDefault()
-        const removed = portfolioVals.filter((val) => {
-            return val !== e.target[0].value;
-        })
-        setPortfolioVals(removed);
+            e.preventDefault()
+            const removed = portfolioVals.filter((val) => {
+                return val !== e.target[0].value;
+            })
+            setPortfolioVals(removed);
         }
 
     return (

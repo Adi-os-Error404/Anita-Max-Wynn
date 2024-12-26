@@ -9,8 +9,8 @@ const DesignGuide = (props: Props) => {
     return (
         <>
             <h1>FinShark Design Page</h1>
-            <RatioList />
-            <Table />
+            {/* <RatioList /> */}
+            {/* <Table /> */}
         </>
     )
 }

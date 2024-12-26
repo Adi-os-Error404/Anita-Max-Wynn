@@ -26,8 +26,22 @@ const CompanyPage = (props: Props) => {
               <div className="w-full relative flex ct-docs-disable-sidebar-content overflow-x-hidden">
               <Sidebar />
               <Dashboard ticker={ticker!}>
+
                 <Tile title='Company Name' subTitle={company.companyName} />
-              </Dashboard>
+                
+                <Tile title='Price' subTitle={company.price.toString()} />
+
+                <Tile title='Sector' subTitle={company.sector} />
+
+                <Tile title='DCF' subTitle={company.dcf.toString()} />
+
+
+                <p className='bg-white shadow rounded text-medium text-gray-500 p-3 mt-1 m-4'>
+                    {company.description}
+                </p>
+
+
+            </Dashboard>
             </div>
             ) :
                 <div>

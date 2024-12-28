@@ -31,11 +31,11 @@ const CompanyPage = (props: Props) => {
 
                 <Tile title='Company Name' subTitle={company.companyName} />
                 
-                <Tile title='Price' subTitle={company.price.toString()} />
+                <Tile title='Price' subTitle={"$" + company.price.toString()} />
+
+                <Tile title='DCF' subTitle={"$" + company.dcf.toString()} />
 
                 <Tile title='Sector' subTitle={company.sector} />
-
-                <Tile title='DCF' subTitle={company.dcf.toString()} />
 
                 <TenKFinder ticker={company.symbol} />
 

@@ -1,16 +1,26 @@
+using api.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddEndpointsApiExplorer();  // Required for discovering endpoints
-builder.Services.AddSwaggerGen();  // Add Swagger generation
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Hookup ApplucationDbContext
+builder.Services.AddDbContext<ApplicationDBContext>(options => {
+    // specify which db to use
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    // GetConnectionString() grabs connetion string from appsettings.json
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();  // Enable Swagger generation
-    app.UseSwaggerUI();  // Enable Swagger UI
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

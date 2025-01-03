@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers(); //plug the controllers into program.cs
 
 // Hookup ApplucationDbContext
 builder.Services.AddDbContext<ApplicationDBContext>(options => {
@@ -24,6 +25,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapControllers(); // prevents https redirect error
 
 app.Run();
 

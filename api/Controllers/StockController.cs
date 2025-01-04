@@ -6,6 +6,7 @@ using api.Data;
 using api.Dtos.Stock;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
 namespace api.Controllers
@@ -20,18 +21,25 @@ namespace api.Controllers
             _context = context;
         }
 
+
+        // async - await allows async. code execution, as db / api exec. can be very slow
+        // return type of async function needs to be wrapped in a Task<>
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var stocks = _context.Stocks.ToList() // toList() is requried for deffered execution
-                .Select(s => s.ToStockDto()); // select is like map() in JS
-            return Ok(stocks);
+            var stocks = await _context.Stocks.ToListAsync(); // toList() is requried for deffered execution
+            // ToList() needs to be converted to ToListAsync() due to async. execution
+
+            var stockDto = stocks.Select(s => s.ToStockDto()); // select is like map() in JS
+            
+            return Ok(stockDto);
         }
 
         [HttpGet("{id}")] // get one requires an Id (getting id from the route)
-        public IActionResult GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var stock = _context.Stocks.Find(id); // can also use FirstOrDefault
+            var stock = await _context.Stocks.FindAsync(id); // can also use FirstOrDefault
+
             if (stock == null) {
                 return NotFound();
             }
@@ -39,11 +47,11 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateStockRequestDto stockDto)
+        public async Task<IActionResult> Create([FromBody] CreateStockRequestDto stockDto)
         {
             var stockModel = stockDto.ToStockFromCreateDto();
-            _context.Stocks.Add(stockModel);
-            _context.SaveChanges();
+            await _context.Stocks.AddAsync(stockModel);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
             // CreatedAtAction() runs GetById by passing in new object with the given stockMode.Id
             // and returns stockModel.ToStockDto()
@@ -51,9 +59,9 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("{id}")] // update requires an Id (getting Id from the route, not body)
-        public IActionResult Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateDto)
         {
-            var stockModel = _context.Stocks.FirstOrDefault(x => x.Id == id);
+            var stockModel = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
             if (stockModel == null) {
                 return NotFound();
             }
@@ -67,22 +75,22 @@ namespace api.Controllers
             stockModel.MarketCap = updateDto.MarketCap;
 
             // Actually updates the details in the database
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
 
             return Ok(stockModel.ToStockDto());
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult Delete([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var stockModel = _context.Stocks.FirstOrDefault(x => x.Id == id);
+            var stockModel = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
             if (stockModel == null) {
                 return NotFound();
             }
 
-            _context.Stocks.Remove(stockModel);
-            _context.SaveChanges();
+            _context.Stocks.Remove(stockModel); // DO NOT ADD await - async when DELETING
+            await _context.SaveChangesAsync();
 
             return NoContent(); // Success - 204
         }

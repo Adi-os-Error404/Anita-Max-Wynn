@@ -18,7 +18,7 @@ namespace api.Data
 
         // Allows us to access tables
         public DbSet<Stock> Stocks {get; set;}
-        public DbSet<Commnet> Comments {get; set;}
+        public DbSet<Comment> Comments {get; set;}
 
     }
 }

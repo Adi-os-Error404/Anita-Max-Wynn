@@ -11,6 +11,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers(); //plug the controllers into program.cs
 
+// Add Newtonsoft
+builder.Services.AddControllers().AddNewtonsoftJson(options => {
+    // to prevent object cycle - part of entity framework so we need to disable it
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+});
+
 // Hookup ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDBContext>(options => {
     // specify which db to use
@@ -18,8 +24,9 @@ builder.Services.AddDbContext<ApplicationDBContext>(options => {
     // GetConnectionString() grabs connetion string from appsettings.json
 });
 
-// Hookup services - IStockRepo, StockRepo
-builder.Services.AddScoped<IStockRepository, StockRepository>();
+// Hookup services
+builder.Services.AddScoped<IStockRepository, StockRepository>(); // for stocks
+builder.Services.AddScoped<ICommentRepository, CommentRepository>(); // for comments
 
 var app = builder.Build();
 
